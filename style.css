@@ -1,3 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
 body {
+    height: 100vh;
     margin: 0;
-}
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    animation: trippy 20s infinite;
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  h1 {
+      font-size: 9rem;
+  }
+  
+  .start-screen {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .leaf {
+      width: 50px;
+      position: absolute;
+      animation-name: wobble;
+      animation-duration: 5s;
+      animation-iteration-count: infinite;
+  }
+
+  .start-screen__button {
+    padding: 2rem 10rem;
+    font-size: 4rem;
+    border-radius: 1rem;
+    animation-name: pulsate;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+  }
+  
+  @keyframes pulsate {
+    0% {background-color: transparent; color: black;}
+    50% {background-color: #222; color: white;}
+    100% {background-color: transparent; color: black;}
+  }
+
+  @keyframes wobble {
+    0% {transform: rotate(15deg);}
+    50% {transform: rotate(-60deg);}
+    100% {transform: rotate(30deg);}
+  } 
+  
+  @keyframes trippy {
+    0% {background-color: #6BCC33;}
+    20% {background-color: #B6FF8C;}
+    40% {background-color: #86FF40;}
+    60% {background-color: #5B8046;}
+    80% {background-color: #438020;}
+    100% {background-color: lawngreen;}
+  }

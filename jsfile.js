@@ -1,4 +1,25 @@
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, "", {preload: preload, create: create, update: update, render: render});	
+document.querySelector(".start-screen__button").addEventListener("click", doStuff);
+let leafs = [];
+
+window.setInterval(() => {
+    let leaf = document.createElement("img");
+    leaf.setAttribute("src", "images/leaf.gif");
+    leaf.classList.add("leaf");
+    leaf.style.top = "0px"
+    leaf.style.left = (Math.floor(Math.random() * window.innerWidth - 60) + 1) + "px";
+    leafs.push(leaf);
+    document.querySelector(".start-screen").insertBefore(leafs[leafs.length - 1], null);
+}, Math.random()*5000);
+
+window.setInterval(() => {
+    leafs.forEach(leaf => leaf.style.zIndex++);
+    leafs.forEach(leaf => leaf.style.top = leaf.style.zIndex + "px");
+    leafs = leafs.filter(leaf => leaf.style.zIndex < window.innerHeight - 60);
+}, 1000/60);
+
+function doStuff() {
+    var game = new Phaser.Game(800, 600, Phaser.CANVAS, "", {preload: preload, create: create, update: update, render: render});
+    document.querySelector(".start-screen").style.display = "none";	
 
 //var sky;	
 var player;
@@ -14,14 +35,7 @@ function preload (){
     game.load.image('player','images/trump_B.png');
     game.load.image('sun', 'images/sun-01.png');
     game.load.image('green', 'images/plant_A.png');
-
 }
-
-function create (){
-    /*game.add.image(0, 0, 'sky');
-    sky = game.add.tileSprite(0, 0, 800, 600, 'sky');
-
-    cursors = game.input.keyboard.createCursorKeys();*/
 
     game.add.tileSprite(0, 0, 10000, 600, 'background');
 
@@ -30,14 +44,16 @@ function create (){
 
     game.world.setBounds(0, 0, 10000, 600);
 
-    game.physics.startSystem(Phaser.Physics.P2JS);
-
     player = game.add.sprite(200, 300, 'player'); 
     player.scale.setTo(0.4,0.4);
 
-    game.physics.arcade.enable(player);
+    function create (){
+        /*game.add.image(0, 0, 'sky');
+        sky = game.add.tileSprite(0, 0, 800, 600, 'sky');
 
-    cursors = game.input.keyboard.createCursorKeys();
+        cursors = game.input.keyboard.createCursorKeys();*/
+
+        game.add.tileSprite(0, 0, 1920, 1920, 'background');
 
     game.camera.follow(player);
 
@@ -65,7 +81,7 @@ var screenCenter = new Phaser.Point(game.world.centerX, game.world.centerY);
 
 function update (){
 
-    /*player.body.setZeroVelocity();
+    player.body.setZeroVelocity();
 
     if (cursors.up.isDown)
     {
@@ -83,7 +99,7 @@ function update (){
     else if (cursors.right.isDown)
     {
         player.body.moveRight(300);
-    }*/
+    }
 
     //  Scroll the background
     //sky.tilePosition.y += 2;
@@ -109,9 +125,10 @@ function update (){
 }
 
 
-function render() {
+    function render() {
 
-    //game.debug.cameraInfo(game.camera, 32, 32);
-    //game.debug.spriteCoords(player, 32, 500);
+        //game.debug.cameraInfo(game.camera, 32, 32);
+        //game.debug.spriteCoords(player, 32, 500);
 
+    }
 }
