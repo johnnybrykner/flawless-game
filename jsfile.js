@@ -31,6 +31,7 @@ var style;
 var itemSprites;
 var greenStuff
 var wave;
+var texts = [];
 var scoreText;
 var collectItems;
 var NUMBER_OF_ITEMS_PLANT=10;
@@ -55,6 +56,7 @@ function preload (){
     game.load.image('badB', 'images/bad_item_B.png');
     game.load.image('badC', 'images/bad_item_C.png');
     game.load.image('badD', 'images/bad_item_D.png');
+    game.load.image('wave', 'images/wave.gif');
 }
 
 function create (){
@@ -66,8 +68,8 @@ function create (){
 
     game.world.setBounds(0, 0, 10000, 600);
 
-    // wave = game.add.sprite(450, 300, 'wave');
-    // wave.scale.x *= -1;
+    wave = game.add.sprite(450, 300, 'wave');
+    wave.scale.x *= -1;
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -81,14 +83,14 @@ function create (){
 
     itemSprites2 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_GOOD_ITEM_A; i++) {
-        itemSprites2[i] = game.add.sprite(game.rnd.frac() * 10000, game.rnd.integerInRange(200, 400), 'goodA');
+        itemSprites2[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'goodA');
         itemSprites2[i].scale.setTo(0.2,0.2);
     }
     game.physics.enable(itemSprites2, Phaser.Physics.ARCADE);
 
     itemSprites3 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_GOOD_ITEM_B; i++) {
-        itemSprites3[i] = game.add.sprite(0,0, 'goodB');
+        itemSprites3[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'goodB');
         itemSprites3[i].scale.setTo(0.2,0.2);
         itemSprites3[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
@@ -96,41 +98,36 @@ function create (){
 
     itemSprites4 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_GOOD_ITEM_C; i++) {
-        itemSprites4[i] = game.add.sprite(0,0, 'goodC');
+        itemSprites4[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'goodC');
         itemSprites4[i].scale.setTo(0.2,0.2);
-        itemSprites4[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites4, Phaser.Physics.ARCADE);
 
     itemSprites5 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_BAD_ITEM_A; i++) {
-        itemSprites5[i] = game.add.sprite(0,0, 'badA');
+        itemSprites5[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'badA');
         itemSprites5[i].scale.setTo(0.2,0.2);
-        itemSprites5[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites2, Phaser.Physics.ARCADE);
     
     itemSprites6 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_BAD_ITEM_B; i++) {
-        itemSprites6[i] = game.add.sprite(0,0, 'badB');
+        itemSprites6[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'badB');
         itemSprites6[i].scale.setTo(0.2,0.2);
-        itemSprites6[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites6, Phaser.Physics.ARCADE);
 
     itemSprites7 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_BAD_ITEM_C; i++) {
-        itemSprites7[i] = game.add.sprite(0,0, 'badC');
+        itemSprites7[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'badC');
         itemSprites7[i].scale.setTo(0.2,0.2);
-        itemSprites7[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites7, Phaser.Physics.ARCADE);
 
     itemSprites8 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_BAD_ITEM_D; i++) {
-        itemSprites8[i] = game.add.sprite(0,0, 'badD');
+        itemSprites8[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'badD');
         itemSprites8[i].scale.setTo(0.2,0.2);
-        itemSprites8[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites8, Phaser.Physics.ARCADE);
 
@@ -192,18 +189,20 @@ function create (){
 
 function update (){
     window.setTimeout(() => {
-        game.camera.x += 5;
+        game.camera.x += 7;
+        wave.position.x += 7;
     }, 3000)
-    // wave.position.x += 5;
 
     if (game.camera.x > player.x) {
-        console.log("dead");
         game.camera.x = 0;
-        game.add.text(player.position.x + 200, player.position.y - 300, "The nature got the best of you, you're dead");
+        player.position.x = 0;
+        texts.push(game.add.text(player.position.x + 50, player.position.y - 300, "As it turns out global warming is not a hoax, you're dead"));
+        wave.position.x = 450;
     }
 
     if(cursors.right.isDown) {
     player.position.x += 10;
+    texts.forEach(text => text.destroy());
     }
     if(cursors.left.isDown) {
     player.position.x -= 10;
