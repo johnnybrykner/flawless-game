@@ -30,6 +30,9 @@ var scoreTextBad;
 var style;
 var itemSprites;
 var greenStuff
+var wave;
+var scoreText;
+var collectItems;
 var NUMBER_OF_ITEMS_PLANT=10;
 var NUMBER_OF_ITEMS_GOOD_ITEM_A=10;
 var NUMBER_OF_ITEMS_GOOD_ITEM_B=10;
@@ -63,23 +66,23 @@ function create (){
 
     game.world.setBounds(0, 0, 10000, 600);
 
-    game.physics.startSystem(Phaser.Physics.P2JS);
+    // wave = game.add.sprite(450, 300, 'wave');
+    // wave.scale.x *= -1;
+
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 
     cursors = game.input.keyboard.createCursorKeys();
 
     var itemSprites = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_PLANT; i++) {
-        itemSprites[i] = game.add.sprite(0,0, 'green');
+        itemSprites[i] = game.add.sprite(game.rnd.integerInRange(500, 10000), game.rnd.integerInRange(200, 400), 'green');
         itemSprites[i].scale.setTo(0.2,0.2);
-        itemSprites[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
-    game.physics.enable(itemSprites, Phaser.Physics.ARCADE);
 
     itemSprites2 = [];
     for (var i = 0; i < NUMBER_OF_ITEMS_GOOD_ITEM_A; i++) {
-        itemSprites2[i] = game.add.sprite(0,0, 'goodA');
+        itemSprites2[i] = game.add.sprite(game.rnd.frac() * 10000, game.rnd.integerInRange(200, 400), 'goodA');
         itemSprites2[i].scale.setTo(0.2,0.2);
-        itemSprites2[i].position = new Phaser.Point(game.rnd.frac() * 10000, game.rnd.frac() * 600);
     }
     game.physics.enable(itemSprites2, Phaser.Physics.ARCADE);
 
@@ -188,10 +191,15 @@ function create (){
 }
 
 function update (){
-    game.camera.x += 2;
+    window.setTimeout(() => {
+        game.camera.x += 5;
+    }, 3000)
+    // wave.position.x += 5;
 
     if (game.camera.x > player.x) {
         console.log("dead");
+        game.camera.x = 0;
+        game.add.text(player.position.x + 200, player.position.y - 300, "The nature got the best of you, you're dead");
     }
 
     if(cursors.right.isDown) {
